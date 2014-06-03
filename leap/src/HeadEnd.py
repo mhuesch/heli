@@ -70,12 +70,13 @@ class SampleListener(Leap.Listener):
                 throttle = ((palm_y - min_height) / (max_height - min_height) * max_throttle)
 
             time.sleep(0.2)
-            instr = '03%03i' % int(throttle)
-            print "Arduino says: "
-            print self.ser.readline()
-            print instr
-            print "sent this many bytes to arduino: "
-            print self.ser.write(instr)
+            if self.ser.inWaiting() > 0:
+                instr = '03%03i\n' % int(throttle)
+                print instr
+                print "sent this many bytes to arduino: "
+                print self.ser.write(instr)
+                print "Arduino says: "
+                print self.ser.readline()
 
             # Get the hand's normal vector and direction
             normal = hand.palm_normal
